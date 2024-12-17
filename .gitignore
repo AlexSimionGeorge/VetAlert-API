@@ -1,0 +1,70 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Django stuff
+*.log
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+static/
+
+# Environment variables
+.env
+secret/
+
+# Virtual environments
+venv/
+env/
+venv.bak/
+.env.bak/
+
+# VS Code specific
+.vscode/
+
+# PyCharm specific
+.idea/
+
+# Node modules (if using Node.js tools like Webpack or React frontend)
+node_modules/
+
+# macOS files
+.DS_Store
+
+# Windows files
+Thumbs.db
+desktop.ini
+
+# Test output
+coverage/
+*.cover
+*.py,cover
+*.hprof
+*.h5
+*.prof
+*.dat
+*.log
+*.pickle
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pytest
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Other cache and backup files
+*.bak
+*.swp
+*.swo
+*~
+*.tmp
