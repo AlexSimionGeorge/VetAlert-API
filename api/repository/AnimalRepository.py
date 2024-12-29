@@ -9,7 +9,7 @@ class AnimalRepository:
     @staticmethod
     def add_animal(animal: Animal):
         doc_ref = animal_collection.document()
-        doc_ref.set(animal.to_dict())
+        doc_ref.set(animal.to_db_format())
         animal.aid = doc_ref.id
         return animal
 
@@ -23,7 +23,7 @@ class AnimalRepository:
     @staticmethod
     def update_animal(animal_id: str, animal: Animal):
         doc_ref = animal_collection.document(animal_id)
-        doc_ref.set(animal.to_dict())
+        doc_ref.set(animal.to_db_format())
 
     @staticmethod
     def delete_animal(animal_id: str):

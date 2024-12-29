@@ -1,4 +1,3 @@
-import json
 from typing import Optional
 
 class Animal:
@@ -19,6 +18,16 @@ class Animal:
             "owner": self.owner,
             "veterinarian": self.veterinarian
         }
+
+    def to_db_format(self):
+        return {
+            "name": self.name,
+            "species": self.species,
+            "picture": self.picture,
+            "owner": self.owner,
+            "veterinarian": self.veterinarian
+        }
+
     @staticmethod
     def from_post_request(data: dict, uid: str):
         return Animal(
