@@ -3,6 +3,7 @@ from api.views.VeterinarianView import VeterinarianView
 from api.views.AnimalView import AnimalView
 from api.views.OwnerView import OwnerView
 from api.views.ItemView import ItemView
+from api.views.TreatmentLogView import TreatmentLogView
 
 urlpatterns = [
     path('veterinarian/', VeterinarianView.as_view(), name='veterinarians'),
@@ -12,4 +13,6 @@ urlpatterns = [
     path('owner/<str:owner_id>/', OwnerView.as_view(), name='owner-detail'),
     path('item/', ItemView.as_view(), name='items'),
     path('item/<str:item_id>/', ItemView.as_view(), name='item-detail'),
+    path('treatmentlog/', TreatmentLogView.as_view(), name='treatment-logs'),
+    path('treatmentlog/<str:tlid>/', TreatmentLogView.as_view(), name='treatment-log-detail'),
 ]
