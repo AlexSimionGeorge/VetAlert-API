@@ -1,1 +1,2 @@
 VeterinarianCollection = "veterinarians"
+AnimalCollection = "animals"

@@ -1,6 +1,5 @@
 from pydantic import EmailStr
 from typing import Optional
-import json
 
 class Veterinarian:
     def __init__(self, name: str, email: EmailStr, cabinet_address: Optional[str] = None, phone_number: Optional[str] = None) -> None:
@@ -20,8 +19,11 @@ class Veterinarian:
             "phone_number": self.phone_number,
         }
 
-    def to_json(self):
-        """
-        Converts the Veterinarian object to a JSON string.
-        """
-        return json.dumps(self.to_dict())
+    @staticmethod
+    def from_dict(data: dict):
+        return Veterinarian(
+            name=data.get("name"),
+            email=data.get("email"),
+            cabinet_address=data.get("cabinet_address"),
+            phone_number=data.get("phone_number"),
+        )
