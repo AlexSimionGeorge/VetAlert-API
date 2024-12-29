@@ -45,9 +45,10 @@ class OwnerView(APIView):
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, owner_id):
+        uid = request.user.to_dict()['uid']
         try:
             owner = OwnerRepository.get_owner(owner_id)
-            if owner:
+            if owner and owner.veterinarian == uid:
                 OwnerRepository.delete_owner(owner_id)
                 return Response({"message": "Owner deleted successfully"}, status=status.HTTP_200_OK)
             else:
