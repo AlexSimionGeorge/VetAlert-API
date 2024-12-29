@@ -2,6 +2,7 @@ from django.urls import path
 from api.views.VeterinarianView import VeterinarianView
 from api.views.AnimalView import AnimalView
 from api.views.OwnerView import OwnerView
+from api.views.ItemView import ItemView
 
 urlpatterns = [
     path('veterinarian/', VeterinarianView.as_view(), name='veterinarians'),
@@ -9,4 +10,6 @@ urlpatterns = [
     path('animal/<str:animal_id>/', AnimalView.as_view(), name='animal-detail'),
     path('owner/', OwnerView.as_view(), name='owners'),
     path('owner/<str:owner_id>/', OwnerView.as_view(), name='owner-detail'),
+    path('item/', ItemView.as_view(), name='items'),
+    path('item/<str:item_id>/', ItemView.as_view(), name='item-detail'),
 ]
