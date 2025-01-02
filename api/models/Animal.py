@@ -39,11 +39,11 @@ class Animal:
         )
 
     @staticmethod
-    def from_put_request(data: dict):
+    def from_put_request(data: dict, picture_url:str):
         return Animal(
             name=data.get("name"),
             species=data.get("species"),
-            picture=data.get("picture"),
+            picture=picture_url,
             owner=data.get("owner"),
             veterinarian=data.get("veterinarian")
         )

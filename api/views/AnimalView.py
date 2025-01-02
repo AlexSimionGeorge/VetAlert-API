@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from api.models.Animal import Animal
+from api.models.FirebaseAuthUser import FirebaseAuthUser
 from api.repository.AnimalRepository import AnimalRepository
 from api.services.FirebaseStorageService import FirebaseStorageService
 
@@ -19,9 +20,6 @@ class AnimalView(APIView):
         else:
             animals = AnimalRepository.find_by_veterinarian_id(uid)
             return Response([animal.to_dict() for animal in animals], status=status.HTTP_200_OK)
-
-
-
 
     def post(self, request):
         uid = request.user.to_dict()['uid']
@@ -40,21 +38,23 @@ class AnimalView(APIView):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-
-
-
-
-
     def put(self, request, animal_id):
         uid = request.user.to_dict()['uid']
-
+        old_animal = AnimalRepository.get_animal(animal_id)
+        if not old_animal or old_animal.veterinarian != uid:
+            return Response({"error": "Can't change animals that don't belong to you."},
+                            status=status.HTTP_400_BAD_REQUEST)
         try:
-            data = request.data
-            new_animal = Animal.from_put_request(data)
+            picture = request.FILES.get('picture')
+            if picture:
+                picture_url = FirebaseStorageService.upload_animal_picture(picture)
+                if old_animal.picture is not None:
+                 FirebaseStorageService.delete_animal_picture(old_animal.picture)
+            else:
+                picture_url = None
 
-            old_animal = AnimalRepository.get_animal(animal_id)
-            if not old_animal or old_animal.veterinarian != uid:
-                return Response({"error": "Can't change animals that don't belong to you."}, status=status.HTTP_400_BAD_REQUEST)
+            data = request.data
+            new_animal = Animal.from_put_request(data, picture_url)
 
             new_animal.merge_with(old_animal)
 
@@ -69,6 +69,8 @@ class AnimalView(APIView):
         try:
             animal = AnimalRepository.get_animal(animal_id)
             if animal and animal.veterinarian == uid:
+                if animal.picture is not None:
+                    FirebaseStorageService.delete_animal_picture(animal.picture)
                 AnimalRepository.delete_animal(animal_id)
                 return Response({"message": "Animal deleted successfully"}, status=status.HTTP_200_OK)
             else:
