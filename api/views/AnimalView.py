@@ -4,6 +4,7 @@ from rest_framework import status
 
 from api.models.Animal import Animal
 from api.repository.AnimalRepository import AnimalRepository
+from api.services.FirebaseStorageService import FirebaseStorageService
 
 
 class AnimalView(APIView):
@@ -19,15 +20,30 @@ class AnimalView(APIView):
             animals = AnimalRepository.find_by_veterinarian_id(uid)
             return Response([animal.to_dict() for animal in animals], status=status.HTTP_200_OK)
 
+
+
+
     def post(self, request):
         uid = request.user.to_dict()['uid']
         try:
             data = request.data
-            animal = Animal.from_post_request(data, uid)
+
+            picture = request.FILES.get('picture')
+            if picture:
+                picture_url = FirebaseStorageService.upload_animal_picture(picture)
+            else:
+                return Response({"error": "Picture file is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+            animal = Animal.from_post_request(data, uid, picture_url)
             animal = AnimalRepository.add_animal(animal)
             return Response(animal.to_dict(), status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
 
     def put(self, request, animal_id):
         uid = request.user.to_dict()['uid']
@@ -43,7 +59,7 @@ class AnimalView(APIView):
             new_animal.merge_with(old_animal)
 
             AnimalRepository.update_animal(animal_id, new_animal)
-            return Response({"message": "Animal updated successfully"}, status=status.HTTP_200_OK)
+            return Response(new_animal.to_dict(), status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 

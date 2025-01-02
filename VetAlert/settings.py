@@ -139,7 +139,9 @@ from firebase_admin import credentials, firestore
 
 FIREBASE_CREDENTIALS = "secret/TEST_firebase_credentials.json"
 cred = credentials.Certificate(FIREBASE_CREDENTIALS)
-firebase_admin.initialize_app(cred)
+firebase_admin.initialize_app(cred, {
+    "storageBucket": "test-vetalert.firebasestorage.app"
+})
 
 # Firestore client
 FIRESTORE_DB = firestore.client()

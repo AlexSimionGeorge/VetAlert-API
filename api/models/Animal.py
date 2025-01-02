@@ -29,11 +29,11 @@ class Animal:
         }
 
     @staticmethod
-    def from_post_request(data: dict, uid: str):
+    def from_post_request(data: dict, uid: str, picture_url: str):
         return Animal(
             name=data.get("name"),
             species=data.get("species"),
-            picture=data.get("picture"),
+            picture=picture_url,
             owner=data.get("owner"),
             veterinarian=uid
         )
@@ -56,6 +56,7 @@ class Animal:
         self.species = self.species or old_animal.species
         self.picture = self.picture or old_animal.picture
         self.owner = self.owner or old_animal.owner
+        self.veterinarian = self.veterinarian or old_animal.veterinarian
 
     @classmethod
     def from_dict_db(cls, dictionary: dict, aid:str):

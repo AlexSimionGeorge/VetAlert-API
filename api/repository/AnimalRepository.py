@@ -1,5 +1,4 @@
 from firebase_admin import firestore
-
 from api.models.Animal import Animal
 from api.repository.CollectionsConfig import AnimalCollection
 
