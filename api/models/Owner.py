@@ -54,3 +54,8 @@ class Owner:
             pets=dictionary.get("pets", []),
             veterinarian=dictionary.get("veterinarian")
         )
+
+    def merge_with(self, old_owner: 'Owner'):
+        self.name = self.name or old_owner.name
+        self.email = self.email or old_owner.email
+        self.veterinarian = self.veterinarian or old_owner.veterinarian

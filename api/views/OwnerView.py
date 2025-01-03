@@ -39,6 +39,8 @@ class OwnerView(APIView):
             if not old_owner or old_owner.veterinarian != uid:
                 return Response({"error": "Can't change owners that don't belong to you."}, status=status.HTTP_404_NOT_FOUND)
 
+            new_owner.merge_with(old_owner)
+
             OwnerRepository.update_owner(owner_id, new_owner)
             return Response({"message": "Owner updated successfully"}, status=status.HTTP_200_OK)
         except Exception as e:
