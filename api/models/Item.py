@@ -1,14 +1,14 @@
 from typing import Optional
 
 class Item:
-    def __init__(self, name: str, code_number: str, expiration_date: int, veterinarian: str, code: str, notes: Optional[str] = None, iid: Optional[str] = None):
+    def __init__(self, name: str, code_number: str, expiration_date: int, veterinarian: str, notes: Optional[str] = None, iid: Optional[str] = None):
         self.iid = iid
         self.name = name
         self.code_number = code_number
         self.expiration_date = expiration_date
         self.notes = notes
         self.veterinarian = veterinarian
-        self.code = code
+
 
     def to_dict(self):
         return {
@@ -18,7 +18,6 @@ class Item:
             'expiration_date': self.expiration_date,
             'notes': self.notes,
             'veterinarian': self.veterinarian,
-            'code': self.code,
         }
 
     def to_db_format(self):
@@ -28,7 +27,6 @@ class Item:
             'expiration_date': self.expiration_date,
             'notes': self.notes,
             'veterinarian': self.veterinarian,
-            'code': self.code,
         }
 
     @staticmethod
@@ -39,7 +37,6 @@ class Item:
             expiration_date=data.get("expiration_date"),
             notes=data.get("notes", ""),
             veterinarian=uid,
-            code=data.get("code"),
         )
 
     @staticmethod
@@ -50,7 +47,6 @@ class Item:
             expiration_date=data.get("expiration_date"),
             notes=data.get("notes", ""),
             veterinarian=data.get("veterinarian"),
-            code=data.get("code"),
         )
 
     @classmethod
@@ -62,5 +58,12 @@ class Item:
             expiration_date=dictionary.get("expiration_date"),
             notes=dictionary.get("notes"),
             veterinarian=dictionary.get("veterinarian"),
-            code=dictionary.get("code"),
         )
+
+
+    def merge_with(self, old_item: 'Item'):
+        self.name = self.name or old_item.name
+        self.code_number = self.code_number or old_item.code_number
+        self.expiration_date = self.expiration_date or old_item.expiration_date
+        self.notes = self.notes or old_item.notes
+        self.veterinarian = self.veterinarian or old_item.veterinarian

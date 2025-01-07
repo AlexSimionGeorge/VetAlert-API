@@ -40,6 +40,8 @@ class ItemView(APIView):
             if not old_item or old_item.veterinarian != uid:
                 return Response({"error": "Can't change items that don't belong to you."}, status=status.HTTP_400_BAD_REQUEST)
 
+            new_item.merge_with(old_item)
+
             ItemRepository.update_item(item_id, new_item)
             return Response({"message": "Item updated successfully"}, status=status.HTTP_200_OK)
         except Exception as e:
