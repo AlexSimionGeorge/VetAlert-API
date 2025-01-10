@@ -161,3 +161,14 @@ CORS_ALLOW_HEADERS = [
     'user-agent',
     'x-requested-with',
 ]
+
+from decouple import config
+
+#FOR MAIL SERVICE
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+DEFAULT_FROM_EMAIL = config('EMAIL')
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = config('EMAIL')
+EMAIL_HOST_PASSWORD = config('PASSWORD')

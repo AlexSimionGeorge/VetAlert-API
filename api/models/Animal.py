@@ -1,5 +1,8 @@
 from typing import Optional
 
+from pydantic_core.core_schema import none_schema
+
+
 class Animal:
     def __init__(self, name: str, species: str, picture: str, owner: str, veterinarian: str, aid:Optional[str] = None):
         self.aid = aid
@@ -55,7 +58,7 @@ class Animal:
         self.name = self.name or old_animal.name
         self.species = self.species or old_animal.species
         self.picture = self.picture or old_animal.picture
-        self.owner = self.owner or old_animal.owner
+        self.owner =  self.owner if self.owner and self.owner is not None else  old_animal.owner
         self.veterinarian = self.veterinarian or old_animal.veterinarian
 
     @classmethod

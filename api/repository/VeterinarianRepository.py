@@ -8,10 +8,14 @@ class VeterinarianRepository:
     @staticmethod
     def veterinarian_exists(uid: str) -> bool:
         """
-        Check if the veterinarian already exists in the Firestore database.
+        Check if the veterinarian already exists in the Firestore database by UID.
         """
         doc_ref = veterinarian_collection.document(uid)
-        return doc_ref.get().exists
+        try:
+            return doc_ref.get().exists
+        except Exception as e:
+            print(f"Error checking if veterinarian exists: {e}")
+            return False
 
     @staticmethod
     def create_veterinarian(uid: str, veterinarian: Veterinarian) -> None:
