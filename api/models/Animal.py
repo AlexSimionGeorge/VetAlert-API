@@ -1,6 +1,5 @@
 from typing import Optional
-
-from pydantic_core.core_schema import none_schema
+from api.repository.OwnerRepository import OwnerRepository
 
 
 class Animal:
@@ -11,6 +10,16 @@ class Animal:
         self.picture = picture
         self.owner = owner
         self.veterinarian = veterinarian
+
+    def to_response(self):
+        return {
+            'aid': self.aid,
+            "name": self.name,
+            "species": self.species,
+            "picture": self.picture,
+            "owner":  OwnerRepository.get_owner(self.owner).to_dict(),
+            "veterinarian": self.veterinarian
+        }
 
     def to_dict(self):
         return {

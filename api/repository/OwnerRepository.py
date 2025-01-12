@@ -1,5 +1,4 @@
 from firebase_admin import firestore
-
 from api.models.Owner import Owner
 from api.repository.CollectionsConfig import OwnerCollection
 

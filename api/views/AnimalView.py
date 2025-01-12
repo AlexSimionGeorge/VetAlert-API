@@ -1,9 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-
 from api.models.Animal import Animal
-from api.models.FirebaseAuthUser import FirebaseAuthUser
 from api.repository.AnimalRepository import AnimalRepository
 from api.services.FirebaseStorageService import FirebaseStorageService
 
@@ -15,11 +13,11 @@ class AnimalView(APIView):
         if animal_id:
             animal = AnimalRepository.get_animal(animal_id)
             if animal and animal.veterinarian == uid:
-                return Response(animal.to_dict(), status=status.HTTP_200_OK)
+                return Response(animal.to_response(), status=status.HTTP_200_OK)
             return Response({"error": "Animal not found"}, status=status.HTTP_404_NOT_FOUND)
         else:
             animals = AnimalRepository.find_by_veterinarian_id(uid)
-            return Response([animal.to_dict() for animal in animals], status=status.HTTP_200_OK)
+            return Response([animal.to_response() for animal in animals], status=status.HTTP_200_OK)
 
     def post(self, request):
         uid = request.user.to_dict()['uid']
@@ -34,7 +32,7 @@ class AnimalView(APIView):
 
             animal = Animal.from_post_request(data, uid, picture_url)
             animal = AnimalRepository.add_animal(animal)
-            return Response(animal.to_dict(), status=status.HTTP_201_CREATED)
+            return Response(animal.to_response(), status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -59,7 +57,7 @@ class AnimalView(APIView):
             new_animal.merge_with(old_animal)
 
             AnimalRepository.update_animal(animal_id, new_animal)
-            return Response(new_animal.to_dict(), status=status.HTTP_200_OK)
+            return Response(new_animal.to_response(), status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 

@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from typing import Optional
 
 class Item:
@@ -15,7 +16,8 @@ class Item:
             'iid': self.iid,
             'name': self.name,
             'code_number': self.code_number,
-            'expiration_date': self.expiration_date,
+            # Convert Unix timestamp to ISO 8601 string
+            'expiration_date': datetime.fromtimestamp(self.expiration_date, tz=timezone.utc).isoformat(),
             'notes': self.notes,
             'veterinarian': self.veterinarian,
         }
