@@ -15,8 +15,8 @@ class VeterinarianView(APIView):
             name = user.to_dict()['name']
             email = user.to_dict()['email']
 
-            if not VeterinarianRepository.veterinarian_exists(uid):
-                MailerService.send_signup_email(email)
+            # if not VeterinarianRepository.veterinarian_exists(uid):
+            #     MailerService.send_signup_email(email)
 
 
             cabinet_address = request.data.get('cabinetAddress')
