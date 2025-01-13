@@ -14,5 +14,5 @@ urlpatterns = [
     path('item/', ItemView.as_view(), name='items'),
     path('item/<str:item_id>/', ItemView.as_view(), name='item-detail'),
     path('treatmentlog/', TreatmentLogView.as_view(), name='treatment-logs'),
-    path('treatmentlog/<str:tlid>/', TreatmentLogView.as_view(), name='treatment-log-detail'),
+    path('treatmentlog/<str:aid>/', TreatmentLogView.as_view(), name='treatment-log-for-animal'),
 ]

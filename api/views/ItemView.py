@@ -21,8 +21,10 @@ class ItemView(APIView):
 
     def post(self, request):
         uid = request.user.to_dict()['uid']
+
         try:
             data = request.data
+
             item = Item.from_post_request(data, uid)
             item = ItemRepository.add_item(item)
             return Response(item.to_dict(), status=status.HTTP_201_CREATED)

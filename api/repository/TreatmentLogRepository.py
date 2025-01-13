@@ -15,6 +15,36 @@ class TreatmentLogRepository:
         return treatment_log
 
     @staticmethod
+    def get_treatment_log_for_animal(aid: str):
+        """
+        Fetch all treatment logs for a specific animal ID.
+
+        Args:
+            aid (str): The animal ID to filter treatment logs by.
+
+        Returns:
+            list[TreatmentLog]: A list of TreatmentLog objects.
+        """
+        try:
+            # Query treatment logs where the "animal" field matches the given animal ID
+            query = treatment_log_collection.where("animal", "==", aid)
+            results = query.stream()
+
+            # Convert Firestore documents to TreatmentLog objects
+            treatment_logs = []
+            for doc in results:
+                data = doc.to_dict()
+                treatment_log = TreatmentLog.from_dict_db(data, doc.id)
+                treatment_logs.append(treatment_log)
+
+            return treatment_logs
+        except Exception as e:
+            print(f"An error occurred while fetching treatment logs for animal {aid}: {e}")
+            return []
+
+
+
+    @staticmethod
     def get_treatment_log(tlid: str):
         doc = treatment_log_collection.document(tlid).get()
         if doc.exists:

@@ -1,23 +1,22 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-
 from api.models.TreatmentLog import TreatmentLog
 from api.repository.TreatmentLogRepository import TreatmentLogRepository
 
 
 class TreatmentLogView(APIView):
-    def get(self, request, tlid=None):
+    def get(self, request, aid=None):
         uid = request.user.to_dict()['uid']
 
-        if tlid:
-            treatment_log = TreatmentLogRepository.get_treatment_log(tlid)
-            if treatment_log and TreatmentLogRepository.is_valid_animal(treatment_log.animal, uid) and TreatmentLogRepository.is_valid_item(treatment_log.item, uid):
-                return Response(treatment_log.to_dict(), status=status.HTTP_200_OK)
-            return Response({"error": "Treatment log not found or not accessible."}, status=status.HTTP_404_NOT_FOUND)
+        if aid:
+            treatment_logs = TreatmentLogRepository.get_treatment_log_for_animal(aid)
+            return Response([tl.to_response() for tl in treatment_logs], status=status.HTTP_200_OK)
         else:
             treatment_logs = TreatmentLogRepository.find_by_veterinarian_id(uid)
-            return Response([tl.to_dict() for tl in treatment_logs], status=status.HTTP_200_OK)
+            return Response([tl.to_response() for tl in treatment_logs], status=status.HTTP_200_OK)
+
+
 
     def post(self, request):
         uid = request.user.to_dict()['uid']
@@ -31,7 +30,7 @@ class TreatmentLogView(APIView):
                 return Response({"error": "Invalid or inaccessible item ID."}, status=status.HTTP_400_BAD_REQUEST)
 
             treatment_log = TreatmentLogRepository.add_treatment_log(treatment_log)
-            return Response(treatment_log.to_dict(), status=status.HTTP_201_CREATED)
+            return Response(treatment_log.to_response(), status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -52,7 +51,7 @@ class TreatmentLogView(APIView):
                 return Response({"error": "Treatment log not found."}, status=status.HTTP_404_NOT_FOUND)
 
             TreatmentLogRepository.update_treatment_log(tlid, new_treatment_log)
-            return Response({"message": "Treatment log updated successfully."}, status=status.HTTP_200_OK)
+            return Response(new_treatment_log.to_response(), status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 

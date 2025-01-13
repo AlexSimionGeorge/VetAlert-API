@@ -1,5 +1,8 @@
 from typing import Optional
 
+from api.repository.ItemRepository import ItemRepository
+
+
 class TreatmentLog:
     def __init__(self, animal: str, item: str, date: int, quantity: str, tlid: Optional[str] = None):
         self.tlid = tlid
@@ -17,6 +20,15 @@ class TreatmentLog:
             'quantity': self.quantity
         }
 
+    def to_response(self):
+        return {
+            'tlid': self.tlid,
+            'animal': self.animal,
+            'item': ItemRepository.get_item(self.item).to_dict(),
+            'date': self.date,
+            'quantity': self.quantity
+        }
+
     def to_db_format(self):
         return {
             'animal': self.animal,
@@ -30,7 +42,7 @@ class TreatmentLog:
         return TreatmentLog(
             animal=data.get('animal'),
             item=data.get('item'),
-            date=data.get('date'),
+            date=int(data.get('date')),
             quantity=data.get('quantity')
         )
 
@@ -43,3 +55,4 @@ class TreatmentLog:
             date=dictionary.get('date'),
             quantity=dictionary.get('quantity')
         )
+
