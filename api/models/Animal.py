@@ -66,7 +66,7 @@ class Animal:
         """
         self.name = self.name or old_animal.name
         self.species = self.species or old_animal.species
-        self.picture = self.picture or old_animal.picture
+        self.picture = old_animal.picture if self.picture is None else old_animal.picture
         self.owner =  self.owner if self.owner and self.owner is not None else  old_animal.owner
         self.veterinarian = self.veterinarian or old_animal.veterinarian
 
