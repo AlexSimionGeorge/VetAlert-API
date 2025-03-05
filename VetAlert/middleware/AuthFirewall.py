@@ -5,6 +5,9 @@ from api.models.FirebaseAuthUser import FirebaseAuthUser
 
 class AuthFirewall(MiddlewareMixin):
     def process_request(self, request):
+
+        return #TODO remove to reactivate firewall
+
         if not request.path.startswith('/api/'):
             return
 
