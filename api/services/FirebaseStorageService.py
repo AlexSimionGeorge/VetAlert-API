@@ -1,5 +1,3 @@
-from urllib.parse import urlparse
-
 from firebase_admin import storage
 import uuid
 
@@ -18,17 +16,13 @@ class FirebaseStorageService:
 
     @staticmethod
     def delete_animal_picture(image_url: str):
-        """
-        Deletes an image from Firebase Storage.
-
-        :param image_url: The public URL of the image to delete.
-        :return: None
-        """
-        imag_id = image_url.split("/")[-1]
         try:
-            bucket = storage.bucket()
-            blob = bucket.blob('animal_picture/' + imag_id)
-            blob.delete()  # Delete the file
-        except Exception as e:
-            print(f"\n\n\n\nError deleting image {imag_id} ___________________________________________:\n{str(e)}")
+            # Extrage calea completă după numele bucketului
+            # Ex: /vetalert-496e7.firebasestorage.app/animal_picture/<uuid>
+            path = image_url.split("/", 4)[-1]  # animal_picture/<uuid>
 
+            bucket = storage.bucket()
+            blob = bucket.blob(path)
+            blob.delete()
+        except Exception as e:
+            print(f"Error deleting image {image_url}: {str(e)}")

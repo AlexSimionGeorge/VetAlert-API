@@ -1,3 +1,5 @@
+from pprint import pprint
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -42,12 +44,15 @@ class AnimalView(APIView):
         if not old_animal or old_animal.veterinarian != uid:
             return Response({"error": "Can't change animals that don't belong to you."},
                             status=status.HTTP_400_BAD_REQUEST)
+
+        new_pic = False
         try:
             picture = request.FILES.get('picture')
             if picture:
                 picture_url = FirebaseStorageService.upload_animal_picture(picture)
                 if old_animal.picture is not None:
-                 FirebaseStorageService.delete_animal_picture(old_animal.picture)
+                    FirebaseStorageService.delete_animal_picture(old_animal.picture)
+                new_pic = True
             else:
                 picture_url = None
 
@@ -55,7 +60,8 @@ class AnimalView(APIView):
             new_animal = Animal.from_put_request(data, picture_url)
 
             new_animal.merge_with(old_animal)
-
+            if new_pic:
+                new_animal.picture = picture_url
             AnimalRepository.update_animal(animal_id, new_animal)
             return Response(new_animal.to_response(), status=status.HTTP_200_OK)
         except Exception as e:

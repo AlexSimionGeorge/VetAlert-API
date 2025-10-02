@@ -1,4 +1,6 @@
 from django.urls import path
+
+from api.views.QuestionView import QuestionView
 from api.views.VeterinarianView import VeterinarianView
 from api.views.AnimalView import AnimalView
 from api.views.OwnerView import OwnerView
@@ -15,4 +17,5 @@ urlpatterns = [
     path('item/<str:item_id>/', ItemView.as_view(), name='item-detail'),
     path('treatmentlog/', TreatmentLogView.as_view(), name='treatment-logs'),
     path('treatmentlog/<str:aid>/', TreatmentLogView.as_view(), name='treatment-log-for-animal'),
+    path('question/', QuestionView.as_view(), name='question')
 ]
